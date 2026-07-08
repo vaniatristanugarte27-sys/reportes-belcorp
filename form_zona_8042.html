@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedidos Pendientes – 8042 LOS OLIVOS</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          background: #f5f4f0; color: #1a1916; font-size: 14px; padding: 0 0 48px; }
+  .header { background: #C51162; padding: 20px 20px 16px; }
+  .header h1 { color: #fff; font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+  .header p { color: rgba(255,255,255,.75); font-size: 13px; }
+  .body { max-width: 600px; margin: 0 auto; padding: 16px; }
+  .card { background: #fff; border: 1px solid #d6d3cc; border-radius: 8px;
+           padding: 14px 16px; margin-bottom: 14px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; margin-bottom: 12px; }
+  .lbl { font-size: 11px; color: #6b6860; margin-bottom: 2px; }
+  .val { font-size: 13px; font-weight: 500; }
+  .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .btn { padding: 9px; border: 1px solid #d6d3cc; border-radius: 6px; background: #fafaf8;
+          font-size: 13px; cursor: pointer; transition: all .15s; }
+  .btn:hover { background: #f0eee8; }
+  .btn.r { background: #e8f5e9; border-color: #388e3c; color: #2e7d32; font-weight: 500; }
+  .btn.a { background: #fce4ec; border-color: #c2185b; color: #ad1457; font-weight: 500; }
+  .txt { width: 100%; border: 1px solid #d6d3cc; border-radius: 6px; padding: 8px 10px;
+          font-size: 13px; font-family: inherit; resize: vertical; min-height: 52px; }
+  .txt:focus { outline: none; border-color: #C51162; }
+  .err { font-size: 12px; color: #c2185b; margin-top: 6px; display: none; }
+  .submit { display: block; width: 100%; padding: 13px; background: #C51162; color: #fff;
+             border: none; border-radius: 8px; font-size: 15px; font-weight: 500;
+             cursor: pointer; margin-top: 8px; }
+  .submit:hover { opacity: .9; }
+  .submit:disabled { opacity: .5; cursor: not-allowed; }
+  .ok { text-align: center; padding: 40px 16px; }
+  .ok-icon { font-size: 48px; margin-bottom: 12px; }
+  .ok h2 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .ok p { color: #6b6860; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Pedidos pendientes — 8042 LOS OLIVOS</h1>
+  <p>Susan Valerie Torres Felix · Indica la acción para cada pedido</p>
+</div>
+<div class="body" id="body">
+  
+        <div class="card" id="card-0">
+          <div class="grid2">
+            <div><div class="lbl">Zona / Sección</div><div class="val">8042 · C</div></div>
+            <div><div class="lbl">Pedido</div><div class="val">2609454667</div></div>
+            <div><div class="lbl">Código</div><div class="val">54878613</div></div>
+            <div><div class="lbl">Consultora</div><div class="val">Flores Oroya Aviel</div></div>
+            <div style="grid-column:span 2"><div class="lbl">Motivo</div>
+              <div class="val" style="color:#935116">DIRECCION ERRADA</div></div>
+          </div>
+          <div class="btns">
+            <button class="btn" onclick="sel(0,'Reenviar',this)">🔄 Reenviar</button>
+            <button class="btn" onclick="sel(0,'Anular',this)">❌ Anular</button>
+          </div>
+          <textarea class="txt" id="txt-0" placeholder="Comentario (opcional)..."></textarea>
+          <div class="err" id="err-0">Por favor selecciona una acción.</div>
+          <input type="hidden" id="accion-0" value="">
+          <input type="hidden" id="zona-0" value="8042">
+          <input type="hidden" id="sec-0" value="C">
+          <input type="hidden" id="cod-0" value="54878613">
+          <input type="hidden" id="consultora-0" value="Flores Oroya Aviel">
+          <input type="hidden" id="pedido-0" value="2609454667">
+          <input type="hidden" id="motivo-0" value="DIRECCION ERRADA">
+        </div>
+  <button class="submit" id="btn-enviar" onclick="enviar()">Enviar respuestas</button>
+</div>
+<script>
+const N = 1;
+const acciones = Array(N).fill('');
+
+function sel(i, accion, btn) {
+  acciones[i] = accion;
+  document.getElementById('accion-' + i).value = accion;
+  const btns = btn.parentElement.querySelectorAll('.btn');
+  btns.forEach(b => b.className = 'btn');
+  btn.classList.add(accion === 'Reenviar' ? 'r' : 'a');
+  document.getElementById('err-' + i).style.display = 'none';
+}
+
+async function enviar() {
+  let ok = true;
+  for (let i = 0; i < N; i++) {
+    if (!acciones[i]) {
+      document.getElementById('err-' + i).style.display = 'block';
+      ok = false;
+    }
+  }
+  if (!ok) return;
+
+  const btn = document.getElementById('btn-enviar');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  const ts = new Date().toLocaleString('es-PE');
+  const rows = [];
+  for (let i = 0; i < N; i++) {
+    rows.push({
+      Timestamp:  ts,
+      Zona:       document.getElementById('zona-' + i).value,
+      Seccion:    document.getElementById('sec-' + i).value,
+      Gerente:    'Susan Valerie Torres Felix',
+      Codigo:     document.getElementById('cod-' + i).value,
+      Consultora: document.getElementById('consultora-' + i).value,
+      Pedido:     document.getElementById('pedido-' + i).value,
+      Motivo:     document.getElementById('motivo-' + i).value,
+      Accion:     acciones[i],
+      Comentario: document.getElementById('txt-' + i).value,
+    });
+  }
+
+  try {
+    const res = await fetch('https://sheetdb.io/api/v1/5szgjrszvfzsp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: rows })
+    });
+    if (!res.ok) throw new Error('Error al enviar');
+    document.getElementById('body').innerHTML = `
+      <div class="ok">
+        <div class="ok-icon">✅</div>
+        <h2>Respuestas enviadas</h2>
+        <p>Gracias, Susan.<br>Puedes cerrar esta ventana.</p>
+      </div>`;
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Enviar respuestas';
+    alert('Hubo un error al enviar. Verifica tu conexión e intenta de nuevo.');
+  }
+}
+</script>
+</body>
+</html>
