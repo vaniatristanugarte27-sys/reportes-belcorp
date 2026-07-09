@@ -43,11 +43,7 @@
   <h1>Pedidos pendientes — 1026 CALLAO</h1>
   <p>Nancy Milagros Migone Gamarra · Indica la acción para cada pedido</p>
 </div>
-<div id="expirado" style="display:none;text-align:center;padding:48px 24px;">
-  <div style="font-size:48px;margin-bottom:12px;">⏰</div>
-  <h2 style="font-size:18px;font-weight:600;margin-bottom:8px;color:#C51162;">Formulario cerrado</h2>
-  <p style="color:#6b6860;font-size:14px;">El plazo para responder este formulario venció a las 3:40 p.m.<br>Si necesitas registrar tu respuesta comunícate directamente.</p>
-</div>
+ 
 <div class="body" id="body">
   
         <div class="card" id="card-0">
@@ -78,18 +74,23 @@
 <script>
 const N = 1;
 const acciones = {};
-
+ 
 // Verificar hora límite al cargar
 (function() {
   const ahora = new Date();
   const limite = new Date();
   limite.setHours(15, 40, 0, 0);
   if (ahora > limite) {
-    document.getElementById('expirado').style.display = 'block';
-    document.getElementById('body').style.display = 'none';
+    document.getElementById('body').innerHTML =
+      '<div style="text-align:center;padding:48px 24px;">' +
+      '<div style="font-size:48px;margin-bottom:12px;">⏰</div>' +
+      '<h2 style="font-size:18px;font-weight:600;margin-bottom:8px;color:#C51162;">Formulario cerrado</h2>' +
+      '<p style="color:#6b6860;font-size:14px;">El plazo para responder venció a las 3:40 p.m.<br>' +
+      'Si necesitas registrar tu respuesta comunícate directamente.</p>' +
+      '</div>';
   }
 })();
-
+ 
 function sel(i, accion, btn) {
   acciones[i] = accion;
   const btns = btn.parentElement.querySelectorAll('.btn');
@@ -97,7 +98,7 @@ function sel(i, accion, btn) {
   btn.className = 'btn ' + (accion === 'Reenviar' ? 'r' : 'a');
   document.getElementById('err-' + i).style.display = 'none';
 }
-
+ 
 async function enviar() {
   let ok = true;
   for (let i = 0; i < N; i++) {
@@ -107,16 +108,16 @@ async function enviar() {
     }
   }
   if (!ok) { return; }
-
+ 
   const btnEnviar = document.getElementById('btn-enviar');
   btnEnviar.disabled = true;
   btnEnviar.textContent = 'Enviando...';
-
+ 
   const ts = new Date().toLocaleString('es-PE', {
     year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit'
   });
-
+ 
   const rows = [];
   for (let i = 0; i < N; i++) {
     const accionVal = acciones[i] || '';
@@ -134,7 +135,7 @@ async function enviar() {
       Comentario: comentVal,
     });
   }
-
+ 
   try {
     const res = await fetch('https://sheetdb.io/api/v1/5szgjrszvfzsp', {
       method: 'POST',
