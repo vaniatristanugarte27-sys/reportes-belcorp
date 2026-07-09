@@ -96,7 +96,7 @@
 </div>
 <script>
 const N = 2;
-const acciones = {};
+const acciones = new Array(N).fill(null);
  
 // Verificar hora límite al cargar
 (function() {
@@ -125,7 +125,7 @@ function sel(i, accion, btn) {
 async function enviar() {
   let ok = true;
   for (let i = 0; i < N; i++) {
-    if (!acciones[i]) {
+    if (acciones[i] === null || acciones[i] === undefined) {
       document.getElementById('err-' + i).style.display = 'block';
       ok = false;
     }
