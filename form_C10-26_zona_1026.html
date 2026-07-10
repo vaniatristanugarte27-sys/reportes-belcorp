@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pedidos Pendientes – 1026 CALLAO</title>
+<title>Pedidos Pendientes – [PRUEBA] 1026 CALLAO</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -40,8 +40,8 @@
 </head>
 <body>
 <div class="header">
-  <h1>Pedidos pendientes — 1026 CALLAO</h1>
-  <p>Nancy Milagros Migone Gamarra · Indica la acción para cada pedido</p>
+  <h1>Pedidos pendientes — [PRUEBA] 1026 CALLAO</h1>
+  <p>Vania Tristan · Indica la acción para cada pedido</p>
 </div>
  
 <div class="body" id="body">
@@ -56,8 +56,8 @@
               <div class="val" style="color:#2c3e50">2DA VISITA - NO SE ENCONTRÓ</div></div>
           </div>
           <div class="btns">
-            <button class="btn" onclick="sel(0,'Reenviar',this)">🔄 Reenviar</button>
-            <button class="btn" onclick="sel(0,'Anular',this)">❌ Anular</button>
+            <button type="button" class="btn" onclick="sel(0,'Reenviar',this)">🔄 Reenviar</button>
+            <button type="button" class="btn" onclick="sel(0,'Anular',this)">❌ Anular</button>
           </div>
           <textarea class="txt" id="txt-0" placeholder="Comentario (opcional)..."></textarea>
           <div class="err" id="err-0">Por favor selecciona una acción.</div>
@@ -69,27 +69,12 @@
           <input type="hidden" id="pedido-0" value="2609540148">
           <input type="hidden" id="motivo-0" value="2DA VISITA - NO SE ENCONTRÓ">
         </div>
-  <button class="submit" id="btn-enviar" onclick="enviar()">Enviar respuestas</button>
+  <button type="button" class="submit" id="btn-enviar" onclick="enviar()">Enviar respuestas</button>
 </div>
 <script>
 const N = 1;
 const acciones = new Array(N).fill(null);
  
-// Verificar hora límite al cargar
-(function() {
-  const ahora = new Date();
-  const limite = new Date();
-  limite.setHours(15, 40, 0, 0);
-  if (ahora > limite) {
-    document.getElementById('body').innerHTML =
-      '<div style="text-align:center;padding:48px 24px;">' +
-      '<div style="font-size:48px;margin-bottom:12px;">⏰</div>' +
-      '<h2 style="font-size:18px;font-weight:600;margin-bottom:8px;color:#C51162;">Formulario cerrado</h2>' +
-      '<p style="color:#6b6860;font-size:14px;">El plazo para responder venció a las 3:40 p.m.<br>' +
-      'Si necesitas registrar tu respuesta comunícate directamente.</p>' +
-      '</div>';
-  }
-})();
  
 function sel(i, accion, btn) {
   acciones[i] = accion;
@@ -126,7 +111,7 @@ async function enviar() {
       Timestamp:  ts,
       Zona:       document.getElementById('zona-' + i).value,
       Seccion:    document.getElementById('sec-' + i).value,
-      Gerente:    'Nancy Milagros Migone Gamarra',
+      Gerente:    'Vania Tristan',
       Codigo:     document.getElementById('cod-' + i).value,
       Consultora: document.getElementById('consultora-' + i).value,
       Pedido:     document.getElementById('pedido-' + i).value,
@@ -150,7 +135,7 @@ async function enviar() {
       '<div class="ok">' +
       '<div class="ok-icon">✅</div>' +
       '<h2>Respuestas enviadas</h2>' +
-      '<p>Gracias, Nancy.<br>Puedes cerrar esta ventana.</p>' +
+      '<p>Gracias, Vania.<br>Puedes cerrar esta ventana.</p>' +
       '</div>';
   } catch(e) {
     btnEnviar.disabled = false;
